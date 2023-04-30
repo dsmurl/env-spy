@@ -1,6 +1,6 @@
 {
   "name": "env-spy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Compares your .env and your example.env to help your team keep them in sync",
   "bin": {
       "env-spy": "index.js"
