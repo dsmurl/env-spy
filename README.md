@@ -2,10 +2,10 @@
 
 ### Install
 
-```npm install -g npm-spy```
+```npm install -g env-spy```
 
 ### Use
 
 - Go to any directory with an ```.env``` and an ```.env.example```
-- run ```npm-spy```
+- Run ```env-spy```
 - Tell your friends
