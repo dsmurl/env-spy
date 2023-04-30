@@ -1,0 +1,24 @@
+{
+  "name": "env-spy",
+  "version": "1.0.0",
+  "description": "Compares your .env and your example.env to help your team keep them in sync",
+  "bin": {
+      "env-spy": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsmurl/env-spy.git"
+  },
+  "author": "dsmurl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dsmurl/env-spy/issues"
+  },
+  "homepage": "https://github.com/dsmurl/env-spy#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  }
+}
