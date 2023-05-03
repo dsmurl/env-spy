@@ -28,59 +28,58 @@ const printLine = (line, color, spaces = 0) => {
   );
 };
 
-try {
-  if (!fs.existsSync(ENV_FILE_NAME) || !fs.existsSync(ENV_EXAMPLE_FILE_NAME)) {
-    throw Error("Missing files");
-  }
-} catch (err) {
-  printLine(
-    ` - Couldn't find ${ENV_FILE_NAME} and ${ENV_EXAMPLE_FILE_NAME}!`,
-    "red",
-    2
-  );
-  process.exit(1);
-}
-
 printLine(
-  `Comparing ${ENV_FILE_NAME} to ${ENV_EXAMPLE_FILE_NAME}...`,
+  `Comparing ${ENV_FILE_NAME} and ${ENV_EXAMPLE_FILE_NAME}...`,
   "green",
   2
 );
 
-const env = dotenv.config({ path: ENV_FILE_NAME }).parsed;
-const envExample = dotenv.config({ path: ENV_EXAMPLE_FILE_NAME }).parsed;
-const envExampleKeys = Object.keys(envExample);
+if (!fs.existsSync(ENV_FILE_NAME)) {
+  printLine(`Missing file ${ENV_FILE_NAME}`, "red", 4);
+}
 
-const missing = {};
-const present = {};
-envExampleKeys.forEach((exampleKey) => {
-  if (!env[exampleKey]) {
-    missing[exampleKey] = envExample[exampleKey];
-    delete env[exampleKey];
-  } else {
-    present[exampleKey] = envExample[exampleKey];
-    delete env[exampleKey];
-  }
-});
+if (!fs.existsSync(ENV_EXAMPLE_FILE_NAME)) {
+  printLine(`Missing file ${ENV_EXAMPLE_FILE_NAME}`, "red", 4);
+}
 
-printLine(
-  `Missing from ${ENV_FILE_NAME} (noted in ${ENV_EXAMPLE_FILE_NAME}):`,
-  "blue",
-  4
-);
-Object.keys(missing).forEach((key) => {
-  printLine(`${key} = ${missing[key]}`, "blue", 6);
-});
+if (fs.existsSync(ENV_FILE_NAME) && fs.existsSync(ENV_EXAMPLE_FILE_NAME)) {
+  const env = dotenv.config({ path: ENV_FILE_NAME }).parsed;
+  const envExample = dotenv.config({ path: ENV_EXAMPLE_FILE_NAME }).parsed;
+  const envExampleKeys = Object.keys(envExample);
 
-printLine(
-  `Extra in ${ENV_FILE_NAME} (not in ${ENV_EXAMPLE_FILE_NAME}): `,
-  "cyan",
-  4
-);
-Object.keys(env).forEach((key) => {
-  printLine(`${key} = ${env[key]}`, "cyan", 6);
-});
+  const missing = {};
+  const present = {};
+  envExampleKeys.forEach((exampleKey) => {
+    if (!env[exampleKey]) {
+      missing[exampleKey] = envExample[exampleKey];
+      delete env[exampleKey];
+    } else {
+      present[exampleKey] = envExample[exampleKey];
+      delete env[exampleKey];
+    }
+  });
 
-listEnvVars();
+  printLine(
+    `Missing from ${ENV_FILE_NAME} (noted in ${ENV_EXAMPLE_FILE_NAME}):`,
+    "yellow",
+    4
+  );
+  Object.keys(missing).forEach((key) => {
+    printLine(`${key} = ${missing[key]}`, "yellow", 6);
+  });
+
+  printLine(
+    `Extra in ${ENV_FILE_NAME} (not in ${ENV_EXAMPLE_FILE_NAME}): `,
+    "cyan",
+    4
+  );
+  Object.keys(env).forEach((key) => {
+    printLine(`${key} = ${env[key]}`, "cyan", 6);
+  });
+}
+
+if (fs.existsSync(ENV_FILE_NAME)) {
+  listEnvVars();
+}
 
 printLine(`...Done`, "green", 2);

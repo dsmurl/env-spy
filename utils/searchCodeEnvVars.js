@@ -16,8 +16,6 @@ const getEnvVars = (file) => {
   return envVars;
 };
 
-const envKeys = Object.keys(dotenv.config({ path: ".env" }).parsed);
-
 const printLine = (line, color, spaces = 0) => {
   const COLORS = {
     black: "\x1b[30m",
@@ -38,6 +36,7 @@ const printLine = (line, color, spaces = 0) => {
 };
 
 const _listEnvVars = (dir) => {
+  const envKeys = Object.keys(dotenv.config({ path: ".env" }).parsed);
   fs.readdirSync(dir).forEach((file) => {
     if (skipFiles.includes(file)) {
       return;
