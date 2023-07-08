@@ -3,43 +3,25 @@
 const dotenv = require("dotenv");
 const fs = require("fs");
 const { listEnvVars } = require("./utils/searchCodeEnvVars.js");
+const { COLORS, printLine, colorPalette } = require("./utils/printUtils.js");
 
 const testValueFromEnv = process.env.TEST_VALUE_FROM_ENV;
 
 const ENV_FILE_NAME = ".env";
 const ENV_EXAMPLE_FILE_NAME = `.env\.example`;
-const COLORS = {
-  black: "\x1b[30m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan: "\x1b[36m",
-  white: "\x1b[37m",
-};
-
-const printLine = (line, color, spaces = 0) => {
-  console.log(
-    `${new Array(spaces + 1).join(" ")}\x1b[1m${
-      COLORS[color] || COLORS["green"]
-    }%s\x1b[0m`,
-    line
-  );
-};
 
 printLine(
   `Comparing ${ENV_FILE_NAME} and ${ENV_EXAMPLE_FILE_NAME}...`,
-  "green",
+  COLORS.greend,
   2
 );
 
 if (!fs.existsSync(ENV_FILE_NAME)) {
-  printLine(`Missing file ${ENV_FILE_NAME}`, "red", 4);
+  printLine(`Missing file ${ENV_FILE_NAME}`, COLORS.red, 4);
 }
 
 if (!fs.existsSync(ENV_EXAMPLE_FILE_NAME)) {
-  printLine(`Missing file ${ENV_EXAMPLE_FILE_NAME}`, "red", 4);
+  printLine(`Missing file ${ENV_EXAMPLE_FILE_NAME}`, COLORS.red, 4);
 }
 
 if (fs.existsSync(ENV_FILE_NAME) && fs.existsSync(ENV_EXAMPLE_FILE_NAME)) {
@@ -61,20 +43,20 @@ if (fs.existsSync(ENV_FILE_NAME) && fs.existsSync(ENV_EXAMPLE_FILE_NAME)) {
 
   printLine(
     `Missing from ${ENV_FILE_NAME} (noted in ${ENV_EXAMPLE_FILE_NAME}):`,
-    "yellow",
+    COLORS.yellow,
     4
   );
   Object.keys(missing).forEach((key) => {
-    printLine(`${key} = ${missing[key]}`, "yellow", 6);
+    printLine(`${key} = ${missing[key]}`, COLORS.yellow, 6);
   });
 
   printLine(
     `Extra in ${ENV_FILE_NAME} (not in ${ENV_EXAMPLE_FILE_NAME}): `,
-    "cyan",
+    COLORS.cyan,
     4
   );
   Object.keys(env).forEach((key) => {
-    printLine(`${key} = ${env[key]}`, "cyan", 6);
+    printLine(`${key} = ${env[key]}`, COLORS.cyan, 6);
   });
 }
 
@@ -82,4 +64,4 @@ if (fs.existsSync(ENV_FILE_NAME)) {
   listEnvVars();
 }
 
-printLine(`...Done`, "green", 2);
+printLine(`...Done`, COLORS.green, 2);

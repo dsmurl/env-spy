@@ -2,6 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const dotenv = require("dotenv");
 
+const { COLORS, printLine } = require("./printUtils");
+
 const skipFiles = ["node_modules"];
 const fileTypes = [".ts", ".js", ".jsx", ".tsx"];
 
@@ -14,25 +16,6 @@ const getEnvVars = (file) => {
     envVars.push(match[2]);
   }
   return envVars;
-};
-
-const printLine = (line, color, spaces = 0) => {
-  const COLORS = {
-    black: "\x1b[30m",
-    red: "\x1b[31m",
-    green: "\x1b[32m",
-    yellow: "\x1b[33m",
-    blue: "\x1b[34m",
-    magenta: "\x1b[35m",
-    cyan: "\x1b[36m",
-    white: "\x1b[37m",
-  };
-  console.log(
-    `${new Array(spaces + 1).join(" ")}\x1b[1m${
-      COLORS[color] || COLORS["green"]
-    }%s\x1b[0m`,
-    line
-  );
 };
 
 const _listEnvVars = (dir) => {
@@ -49,8 +32,8 @@ const _listEnvVars = (dir) => {
       const envVars = getEnvVars(filePath);
       const missingEnvVar = envVars.filter((f) => !envKeys.includes(f));
       if (missingEnvVar.length > 0) {
-        printLine(`${filePath}:`, "red", 6);
-        printLine(Array.from(missingEnvVar).join(", "), "red", 8);
+        printLine(`${filePath}:`, COLORS.red, 6);
+        printLine(Array.from(missingEnvVar).join(", "), COLORS.red, 8);
       }
     }
   });
@@ -59,7 +42,7 @@ const _listEnvVars = (dir) => {
 const listEnvVars = () => {
   printLine(
     `Env vars in code, but missing in .env (starting at "./"):`,
-    "red",
+    COLORS.red,
     4
   );
   _listEnvVars(".");
